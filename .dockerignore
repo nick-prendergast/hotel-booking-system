@@ -1,0 +1,6 @@
+echo 'target/
+!target/*.jar
+.git
+.idea
+*.iml
+README.md' > .dockerignore
