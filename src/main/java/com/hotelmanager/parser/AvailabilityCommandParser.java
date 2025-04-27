@@ -18,7 +18,6 @@ public class AvailabilityCommandParser implements CommandParser<AvailabilityRequ
 
     private final RequestValidationService validationService;
 
-
     @Override
     public boolean canParse(String input) {
         return PATTERN.matcher(input).matches();
