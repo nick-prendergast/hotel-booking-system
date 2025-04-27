@@ -8,6 +8,8 @@ import com.hotelmanager.model.response.AvailabilityResponse;
 import com.hotelmanager.model.response.SearchResponse;
 import com.hotelmanager.parser.AvailabilityCommandParser;
 import com.hotelmanager.parser.SearchCommandParser;
+import com.hotelmanager.service.availability.AvailabilityService;
+import com.hotelmanager.service.presentation.ResponseFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hotelmanager.exception.DataLoadException;

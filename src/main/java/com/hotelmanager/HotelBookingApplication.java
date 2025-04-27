@@ -1,9 +1,9 @@
 package com.hotelmanager;
 
 import com.hotelmanager.exception.BookingSystemException;
-import com.hotelmanager.service.ConsoleOutputService;
+import com.hotelmanager.service.presentation.ConsoleOutputService;
 import com.hotelmanager.service.HotelBookingService;
-import com.hotelmanager.service.HotelDataService;
+import com.hotelmanager.service.data.HotelDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

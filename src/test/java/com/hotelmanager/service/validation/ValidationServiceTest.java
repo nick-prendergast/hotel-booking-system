@@ -1,10 +1,11 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.validation;
 
 import com.hotelmanager.exception.HotelNotFoundException;
 import com.hotelmanager.exception.InvalidCommandException;
 import com.hotelmanager.exception.InvalidDateRangeException;
 import com.hotelmanager.exception.RoomTypeNotFoundException;
 import com.hotelmanager.model.Hotel;
+import com.hotelmanager.service.data.HotelDataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

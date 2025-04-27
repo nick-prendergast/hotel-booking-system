@@ -6,8 +6,15 @@ import com.hotelmanager.model.Booking;
 import com.hotelmanager.model.Hotel;
 import com.hotelmanager.model.Room;
 import com.hotelmanager.model.RoomType;
-import com.hotelmanager.service.AvailabilityService;
+import com.hotelmanager.service.availability.AvailabilityCalculator;
+import com.hotelmanager.service.availability.AvailabilityService;
+import com.hotelmanager.service.data.HotelDataService;
 import com.hotelmanager.service.CommandProcessor;
+import com.hotelmanager.service.HotelBookingService;
+import com.hotelmanager.service.presentation.ConsoleOutputService;
+import com.hotelmanager.service.presentation.ResponseFormatter;
+import com.hotelmanager.service.validation.RequestValidationService;
+import com.hotelmanager.service.validation.ValidationService;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,11 +40,11 @@ class HotelBookingIntegrationTest {
     private ByteArrayOutputStream errorStream;
 
     private static CommandProcessor getCommandProcessor(Validator validator, AvailabilityService availabilityService) {
-        var requestValidationService = new com.hotelmanager.service.RequestValidationService(validator);
+        var requestValidationService = new RequestValidationService(validator);
 
         var availabilityParser = new com.hotelmanager.parser.AvailabilityCommandParser(requestValidationService);
         var searchParser = new com.hotelmanager.parser.SearchCommandParser(requestValidationService);
-        var responseFormatter = new com.hotelmanager.service.ResponseFormatter();
+        var responseFormatter = new ResponseFormatter();
 
         return new CommandProcessor(
                 availabilityParser, searchParser, availabilityService, responseFormatter);
@@ -187,16 +194,16 @@ class HotelBookingIntegrationTest {
     }
 
     private HotelBookingApplication createApplication() {
-        var dataService = new com.hotelmanager.service.HotelDataService(objectMapper);
-        var availabilityCalculator = new com.hotelmanager.service.AvailabilityCalculator(dataService);
-        var validationService = new com.hotelmanager.service.ValidationService(dataService);
-        var availabilityService = new com.hotelmanager.service.AvailabilityService(validationService, availabilityCalculator);
+        var dataService = new HotelDataService(objectMapper);
+        var availabilityCalculator = new AvailabilityCalculator(dataService);
+        var validationService = new ValidationService(dataService);
+        var availabilityService = new AvailabilityService(validationService, availabilityCalculator);
 
         var validator = jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator();
         var commandProcessor = getCommandProcessor(validator, availabilityService);
 
-        var consoleOutputService = new com.hotelmanager.service.ConsoleOutputService();
-        var hotelBookingService = new com.hotelmanager.service.HotelBookingService(commandProcessor, consoleOutputService);
+        var consoleOutputService = new ConsoleOutputService();
+        var hotelBookingService = new HotelBookingService(commandProcessor, consoleOutputService);
 
         return new HotelBookingApplication(dataService, hotelBookingService, consoleOutputService);
     }

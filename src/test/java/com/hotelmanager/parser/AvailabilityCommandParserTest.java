@@ -2,7 +2,7 @@ package com.hotelmanager.parser;
 
 import com.hotelmanager.exception.InvalidCommandException;
 import com.hotelmanager.model.request.AvailabilityRequest;
-import com.hotelmanager.service.RequestValidationService;
+import com.hotelmanager.service.validation.RequestValidationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

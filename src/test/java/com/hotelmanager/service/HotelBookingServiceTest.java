@@ -1,6 +1,7 @@
 package com.hotelmanager.service;
 
 import com.hotelmanager.model.CommandResult;
+import com.hotelmanager.service.presentation.ConsoleOutputService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

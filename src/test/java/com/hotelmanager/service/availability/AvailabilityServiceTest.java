@@ -1,4 +1,4 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.availability;
 
 import com.hotelmanager.model.DailyAvailability;
 import com.hotelmanager.model.DateRangeAvailability;
@@ -7,6 +7,7 @@ import com.hotelmanager.model.request.AvailabilityRequest;
 import com.hotelmanager.model.request.SearchRequest;
 import com.hotelmanager.model.response.AvailabilityResponse;
 import com.hotelmanager.model.response.SearchResponse;
+import com.hotelmanager.service.validation.ValidationService;
 import com.hotelmanager.util.DateRangeUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

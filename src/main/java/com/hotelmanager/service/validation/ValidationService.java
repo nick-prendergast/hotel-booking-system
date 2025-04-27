@@ -1,10 +1,11 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.validation;
 
 import com.hotelmanager.exception.HotelNotFoundException;
 import com.hotelmanager.exception.InvalidCommandException;
 import com.hotelmanager.exception.InvalidDateRangeException;
 import com.hotelmanager.exception.RoomTypeNotFoundException;
 import com.hotelmanager.model.Hotel;
+import com.hotelmanager.service.data.HotelDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

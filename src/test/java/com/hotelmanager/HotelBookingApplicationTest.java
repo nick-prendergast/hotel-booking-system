@@ -1,9 +1,9 @@
 package com.hotelmanager;
 
 import com.hotelmanager.exception.DataLoadException;
-import com.hotelmanager.service.ConsoleOutputService;
+import com.hotelmanager.service.presentation.ConsoleOutputService;
 import com.hotelmanager.service.HotelBookingService;
-import com.hotelmanager.service.HotelDataService;
+import com.hotelmanager.service.data.HotelDataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

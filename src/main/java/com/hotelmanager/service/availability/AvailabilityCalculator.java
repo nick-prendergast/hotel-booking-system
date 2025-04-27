@@ -1,7 +1,8 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.availability;
 
 import com.hotelmanager.exception.HotelNotFoundException;
 import com.hotelmanager.model.DailyAvailability;
+import com.hotelmanager.service.data.HotelDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

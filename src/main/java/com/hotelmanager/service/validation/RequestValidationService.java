@@ -1,4 +1,4 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.validation;
 
 import com.hotelmanager.exception.InvalidCommandException;
 import jakarta.validation.ConstraintViolation;

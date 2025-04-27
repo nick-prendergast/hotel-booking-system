@@ -1,4 +1,4 @@
-package com.hotelmanager.service;
+package com.hotelmanager.service.presentation;
 
 import com.hotelmanager.model.CommandResult;
 import org.junit.jupiter.api.AfterEach;
