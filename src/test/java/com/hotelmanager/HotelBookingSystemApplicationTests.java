@@ -8,11 +8,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @SpringBootTest
 class HotelBookingSystemApplicationTests {
 
-	@MockitoBean
-	private CommandLineRunner commandLineRunner;
+    @MockitoBean
+    private CommandLineRunner commandLineRunner;
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }

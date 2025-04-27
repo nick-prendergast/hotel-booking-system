@@ -1,7 +1,7 @@
 package com.hotelmanager.service;
 
+import com.hotelmanager.exception.HotelNotFoundException;
 import com.hotelmanager.model.DailyAvailability;
-import com.hotelmanager.model.Hotel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,24 +24,11 @@ public class AvailabilityCalculator {
         log.debug("Calculating minimum availability: hotelId={}, roomType={}, start={}, end={}",
                 hotelId, roomType, startDate, endDate);
 
-        Hotel hotel = hotelDataService.getHotel(hotelId);
-        int totalRooms = hotel.getTotalRoomsByType(roomType);
+        int totalRooms = getTotalRoomsByType(hotelId, roomType);
+        List<LocalDate> dateRange = generateDateRange(startDate, endDate);
 
-        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-
-        // For large date ranges, use parallel processing
-        Stream<LocalDate> dateStream = Stream.iterate(startDate, date -> date.plusDays(1))
-                .limit(daysBetween);
-
-        if (daysBetween > 30) {
-            dateStream = dateStream.parallel();
-        }
-
-        int minAvailability = dateStream
-                .mapToInt(date -> {
-                    int bookings = hotelDataService.getBookingsForDate(hotelId, roomType, date).size();
-                    return totalRooms - bookings;
-                })
+        int minAvailability = dateRange.stream()
+                .mapToInt(date -> calculateAvailabilityForDate(hotelId, roomType, totalRooms, date))
                 .min()
                 .orElse(totalRooms);
 
@@ -53,29 +40,34 @@ public class AvailabilityCalculator {
         log.debug("Finding available dates: hotelId={}, roomType={}, daysAhead={}",
                 hotelId, roomType, daysAhead);
 
-        Hotel hotel = hotelDataService.getHotel(hotelId);
-        int totalRooms = hotel.getTotalRoomsByType(roomType);
+        int totalRooms = getTotalRoomsByType(hotelId, roomType);
         LocalDate today = LocalDate.now();
 
-        // Use parallel processing for large searches
-        Stream<Integer> dayStream = Stream.iterate(0, i -> i + 1).limit(daysAhead);
-
-        if (daysAhead > 100) {
-            dayStream = dayStream.parallel();
-        }
-
-        List<DailyAvailability> availabilities = dayStream
-                .map(i -> {
-                    LocalDate date = today.plusDays(i);
-                    int bookings = hotelDataService.getBookingsForDate(hotelId, roomType, date).size();
-                    int availability = totalRooms - bookings;
+        return Stream.iterate(today, date -> date.plusDays(1))
+                .limit(daysAhead)
+                .map(date -> {
+                    int availability = calculateAvailabilityForDate(hotelId, roomType, totalRooms, date);
                     return new DailyAvailability(date, availability);
                 })
                 .filter(daily -> daily.availability() > 0)
                 .collect(Collectors.toList());
-
-        log.debug("Found {} available dates", availabilities.size());
-        return availabilities;
     }
 
+    private int getTotalRoomsByType(String hotelId, String roomType) {
+        return hotelDataService.findHotelById(hotelId)
+                .orElseThrow(() -> new HotelNotFoundException(hotelId))
+                .getTotalRoomsByType(roomType);
+    }
+
+    private int calculateAvailabilityForDate(String hotelId, String roomType, int totalRooms, LocalDate date) {
+        int bookings = hotelDataService.findBookingsForDate(hotelId, roomType, date).size();
+        return totalRooms - bookings;
+    }
+
+    private List<LocalDate> generateDateRange(LocalDate startDate, LocalDate endDate) {
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        return Stream.iterate(startDate, date -> date.plusDays(1))
+                .limit(daysBetween)
+                .collect(Collectors.toList());
+    }
 }

@@ -1,13 +1,11 @@
 package com.hotelmanager.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hotelmanager.exception.BookingSystemException;
+import com.hotelmanager.exception.DataLoadException;
 import com.hotelmanager.model.Booking;
 import com.hotelmanager.model.Hotel;
-import com.hotelmanager.model.Room;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -27,7 +25,7 @@ public class HotelDataService {
     private final List<Booking> bookings = Collections.synchronizedList(new ArrayList<>());
     private volatile boolean initialized = false;
 
-    public void loadData(String hotelsFile, String bookingsFile) {
+    public void loadFromFiles(String hotelsFile, String bookingsFile) {
         log.info("Loading hotel data from: {}", hotelsFile);
         log.info("Loading booking data from: {}", bookingsFile);
 
@@ -53,7 +51,7 @@ public class HotelDataService {
 
         } catch (IOException e) {
             log.error("Failed to load data files", e);
-            throw new BookingSystemException("Failed to load data: " + e.getMessage(), e);
+            throw new DataLoadException("Failed to load data: " + e.getMessage(), e);
         }
     }
 
@@ -62,22 +60,20 @@ public class HotelDataService {
         File bookingFileObj = new File(bookingsFile);
 
         if (!hotelFileObj.exists() || !hotelFileObj.canRead()) {
-            throw new BookingSystemException("Hotels file not found or not readable: " + hotelsFile);
+            throw new DataLoadException("Hotels file not found or not readable: " + hotelsFile);
         }
 
         if (!bookingFileObj.exists() || !bookingFileObj.canRead()) {
-            throw new BookingSystemException("Bookings file not found or not readable: " + bookingsFile);
+            throw new DataLoadException("Bookings file not found or not readable: " + bookingsFile);
         }
     }
 
-    @Cacheable(value = "hotels", key = "#hotelId")
-    public Hotel getHotel(String hotelId) {
+    public Optional<Hotel> findHotelById(String hotelId) {
         ensureInitialized();
-        return hotels.get(hotelId);
+        return Optional.ofNullable(hotels.get(hotelId));
     }
 
-    @Cacheable(value = "bookings", key = "#hotelId + '-' + #roomType + '-' + #date")
-    public List<Booking> getBookingsForDate(String hotelId, String roomType, LocalDate date) {
+    public List<Booking> findBookingsForDate(String hotelId, String roomType, LocalDate date) {
         ensureInitialized();
         return bookings.stream()
                 .filter(booking -> booking.hotelId().equals(hotelId) &&
@@ -90,7 +86,7 @@ public class HotelDataService {
 
     private void ensureInitialized() {
         if (!initialized) {
-            throw new BookingSystemException("Hotel data not initialized");
+            throw new DataLoadException("Hotel data not initialized");  // CHANGED
         }
     }
 

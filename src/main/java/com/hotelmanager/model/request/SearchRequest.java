@@ -1,15 +1,17 @@
 package com.hotelmanager.model.request;
 
-import jakarta.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public record SearchRequest(
-        @NotNull(message = "{error.search.hotelId.notNull}")
+        @NotBlank(message = "Hotel ID is required")
         String hotelId,
 
-        @Positive(message = "{error.search.daysAhead.positive}")
+        @Positive(message = "Days ahead must be positive")
         int daysAhead,
 
-        @NotNull(message = "{error.search.roomType.notNull}")
+        @NotBlank(message = "Room type is required")
         String roomType
-) {}
+) {
+}

@@ -1,6 +1,6 @@
 package com.hotelmanager;
 
-import com.hotelmanager.exception.BookingSystemException;
+import com.hotelmanager.exception.DataLoadException;
 import com.hotelmanager.service.ConsoleOutputService;
 import com.hotelmanager.service.HotelBookingService;
 import com.hotelmanager.service.HotelDataService;
@@ -34,7 +34,7 @@ class HotelBookingApplicationTest {
     }
 
     @Test
-    void executeApplication_WithValidArgs_ShouldLoadDataAndStartCommandLoop() throws Exception {
+    void executeApplication_WithValidArgs_ShouldLoadDataAndStartCommandLoop() {
         // Given
         String[] args = {"--hotels", "test_hotels.json", "--bookings", "test_bookings.json"};
 
@@ -43,7 +43,7 @@ class HotelBookingApplicationTest {
 
         // Then
         assertThat(result).isTrue();
-        verify(hotelDataService).loadData("test_hotels.json", "test_bookings.json");
+        verify(hotelDataService).loadFromFiles("test_hotels.json", "test_bookings.json");
         verify(hotelBookingService).startCommandLoop();
         verifyNoInteractions(consoleOutputService);
     }
@@ -64,18 +64,18 @@ class HotelBookingApplicationTest {
     }
 
     @Test
-    void executeApplication_WithDataLoadError_ShouldDisplayErrorAndReturnFalse() throws Exception {
+    void executeApplication_WithDataLoadError_ShouldDisplayErrorAndReturnFalse() {
         // Given
         String[] args = {"--hotels", "test_hotels.json", "--bookings", "test_bookings.json"};
-        doThrow(new BookingSystemException("File not found"))
-                .when(hotelDataService).loadData(anyString(), anyString());
+        doThrow(new DataLoadException("File not found"))
+                .when(hotelDataService).loadFromFiles(anyString(), anyString());
 
         // When
         boolean result = application.executeApplication(args);
 
         // Then
         assertThat(result).isFalse();
-        verify(hotelDataService).loadData("test_hotels.json", "test_bookings.json");
+        verify(hotelDataService).loadFromFiles("test_hotels.json", "test_bookings.json");
         verify(consoleOutputService).displayError("File not found");
         verify(hotelBookingService, never()).startCommandLoop();
     }

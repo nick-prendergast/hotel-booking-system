@@ -1,16 +1,18 @@
 package com.hotelmanager.model.request;
 
-import jakarta.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record AvailabilityRequest(
-        @NotNull(message = "{error.availability.hotelId.notNull}")
+        @NotBlank(message = "Hotel ID is required")
         String hotelId,
 
-        @NotNull(message = "{error.availability.dateRange.notNull}")
+        @NotBlank(message = "Date range is required")
         @Pattern(regexp = "\\d{8}(-\\d{8})?", message = "{error.availability.dateRange.pattern}")
         String dateRange,
 
-        @NotNull(message = "{error.availability.roomType.notNull}")
+        @NotBlank(message = "Room type is required")
         String roomType
-) {}
+) {
+}

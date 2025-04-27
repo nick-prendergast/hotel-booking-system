@@ -1,11 +1,10 @@
 package com.hotelmanager.util;
 
-import com.hotelmanager.model.DateRangeAvailability;
 import com.hotelmanager.model.DailyAvailability;
+import com.hotelmanager.model.DateRangeAvailability;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,33 +12,59 @@ import java.util.List;
 @UtilityClass
 public class DateRangeUtil {
 
-
     public List<DateRangeAvailability> consolidateDateRanges(List<DailyAvailability> dailyAvailabilities) {
-        if (dailyAvailabilities.isEmpty()) {
+        if (isEmptyOrNull(dailyAvailabilities)) {
             return Collections.emptyList();
         }
 
-        List<DateRangeAvailability> result = new ArrayList<>();
-        LocalDate rangeStart = dailyAvailabilities.get(0).date();
-        int currentAvailability = dailyAvailabilities.get(0).availability();
+        List<DateRangeAvailability> consolidatedRanges = new ArrayList<>();
 
-        for (int i = 1; i < dailyAvailabilities.size(); i++) {
-            DailyAvailability current = dailyAvailabilities.get(i);
-            DailyAvailability previous = dailyAvailabilities.get(i - 1);
+        DailyAvailability initialDay = dailyAvailabilities.getFirst();
+        LocalDate currentRangeStart = initialDay.date();
+        LocalDate lastProcessedDate = currentRangeStart;
+        int currentRangeAvailability = initialDay.availability();
 
-            if (current.date().equals(previous.date().plusDays(1)) &&
-                    current.availability() == currentAvailability) {
-            } else {
-                result.add(new DateRangeAvailability(rangeStart, previous.date(), currentAvailability));
-                rangeStart = current.date();
-                currentAvailability = current.availability();
+        for (DailyAvailability currentDay : dailyAvailabilities) {
+            if (isFirstDayAlreadyProcessed(currentDay, currentRangeStart)) {
+                continue;
             }
+
+            if (shouldStartNewRange(lastProcessedDate, currentDay, currentRangeAvailability)) {
+                consolidatedRanges.add(createDateRange(currentRangeStart, lastProcessedDate, currentRangeAvailability));
+
+                currentRangeStart = currentDay.date();
+                currentRangeAvailability = currentDay.availability();
+            }
+
+            lastProcessedDate = currentDay.date();
         }
 
-        result.add(new DateRangeAvailability(rangeStart,
-                dailyAvailabilities.get(dailyAvailabilities.size() - 1).date(),
-                currentAvailability));
+        consolidatedRanges.add(createDateRange(currentRangeStart, lastProcessedDate, currentRangeAvailability));
+        return consolidatedRanges;
+    }
 
-        return result;
+    private boolean isEmptyOrNull(List<DailyAvailability> dailyAvailabilities) {
+        return dailyAvailabilities == null || dailyAvailabilities.isEmpty();
+    }
+
+    private boolean isFirstDayAlreadyProcessed(DailyAvailability currentDay, LocalDate rangeStart) {
+        return currentDay.date().equals(rangeStart);
+    }
+
+    private boolean shouldStartNewRange(LocalDate lastProcessedDate, DailyAvailability currentDay, int currentAvailability) {
+        return !isConsecutiveDay(lastProcessedDate, currentDay.date()) ||
+                !hasSameAvailability(currentDay, currentAvailability);
+    }
+
+    private boolean isConsecutiveDay(LocalDate lastDate, LocalDate currentDate) {
+        return currentDate.equals(lastDate.plusDays(1));
+    }
+
+    private boolean hasSameAvailability(DailyAvailability day, int availability) {
+        return day.availability() == availability;
+    }
+
+    private DateRangeAvailability createDateRange(LocalDate start, LocalDate end, int availability) {
+        return new DateRangeAvailability(start, end, availability);
     }
 }

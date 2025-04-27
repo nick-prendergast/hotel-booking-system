@@ -2,14 +2,25 @@ package com.hotelmanager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.hotelmanager.model.*;
+import com.hotelmanager.model.Booking;
+import com.hotelmanager.model.Hotel;
+import com.hotelmanager.model.Room;
+import com.hotelmanager.model.RoomType;
+import com.hotelmanager.parser.AvailabilityCommandParser;
+import com.hotelmanager.parser.SearchCommandParser;
 import com.hotelmanager.service.*;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,21 +37,47 @@ class HotelBookingIntegrationTest {
     private InputStream originalIn;
     private ObjectMapper objectMapper;
 
+    private static CommandProcessor getCommandProcessor(ValidatorFactory factory, AvailabilityService availabilityService) {
+        Validator validator = factory.getValidator();
+        RequestValidationService requestValidationService = new RequestValidationService(validator);
+
+        // Command processing layer - Now parsers need validation service
+        AvailabilityCommandParser availabilityParser = new AvailabilityCommandParser(requestValidationService);
+        SearchCommandParser searchParser = new SearchCommandParser(requestValidationService);
+        ResponseFormatter responseFormatter = new ResponseFormatter();
+        return new CommandProcessor(
+                availabilityParser,
+                searchParser,
+                availabilityService,
+                responseFormatter
+        );
+    }
+
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule());
 
+        // Data layer
         HotelDataService hotelDataService = new HotelDataService(objectMapper);
+
+        // Service layer
         AvailabilityCalculator availabilityCalculator = new AvailabilityCalculator(hotelDataService);
         ValidationService validationService = new ValidationService(hotelDataService);
         AvailabilityService availabilityService = new AvailabilityService(validationService, availabilityCalculator);
-        CommandProcessor commandProcessor = new CommandProcessor(availabilityService);
+
+        // Validation layer - Create validator manually since we're not using Spring context
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        CommandProcessor commandProcessor = getCommandProcessor(factory, availabilityService);
+
+        // Console layer
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         HotelBookingService hotelBookingService = new HotelBookingService(commandProcessor, consoleOutputService);
 
+        // Application
         application = new HotelBookingApplication(hotelDataService, hotelBookingService, consoleOutputService);
 
+        // Setup output capture
         originalOut = System.out;
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
@@ -71,10 +108,10 @@ class HotelBookingIntegrationTest {
 
         // Set up input commands
         String commands = """
-            Availability(H1, 20240901, SGL)
-            Availability(H1, 20240901-20240903, DBL)
-
-            """;
+                Availability(H1, 20240901, SGL)
+                Availability(H1, 20240901-20240903, DBL)
+                
+                """;
         System.setIn(new ByteArrayInputStream(commands.getBytes()));
 
         // Execute application
