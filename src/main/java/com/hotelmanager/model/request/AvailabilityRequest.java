@@ -9,7 +9,7 @@ public record AvailabilityRequest(
         String hotelId,
 
         @NotBlank(message = "Date range is required")
-        @Pattern(regexp = "\\d{8}(-\\d{8})?", message = "{error.availability.dateRange.pattern}")
+        @Pattern(regexp = "\\d{8}(-\\d{8})?", message = "Date range must be in format YYYYMMDD or YYYYMMDD-YYYYMMDD")
         String dateRange,
 
         @NotBlank(message = "Room type is required")

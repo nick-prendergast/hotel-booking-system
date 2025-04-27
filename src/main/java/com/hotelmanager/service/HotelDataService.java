@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,9 +20,9 @@ import java.util.stream.Collectors;
 public class HotelDataService {
 
     private final ObjectMapper objectMapper;
-    private final Map<String, Hotel> hotels = new ConcurrentHashMap<>();
-    private final List<Booking> bookings = Collections.synchronizedList(new ArrayList<>());
-    private volatile boolean initialized = false;
+    private final Map<String, Hotel> hotels = new HashMap<>();
+    private final List<Booking> bookings = new ArrayList<>();
+    private boolean initialized = false;
 
     public void loadFromFiles(String hotelsFile, String bookingsFile) {
         log.info("Loading hotel data from: {}", hotelsFile);
@@ -86,7 +85,7 @@ public class HotelDataService {
 
     private void ensureInitialized() {
         if (!initialized) {
-            throw new DataLoadException("Hotel data not initialized");  // CHANGED
+            throw new DataLoadException("Hotel data not initialized");
         }
     }
 
