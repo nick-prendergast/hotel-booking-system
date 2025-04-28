@@ -6,45 +6,52 @@
       {
         "code": "SGL",
         "description": "Single Room",
-        "amenities": [
-          "WiFi",
-          "TV"
-        ],
-        "features": [
-          "Non-smoking"
-        ]
+        "amenities": ["WiFi", "TV"],
+        "features": ["Non-smoking"]
       },
       {
         "code": "DBL",
         "description": "Double Room",
-        "amenities": [
-          "WiFi",
-          "TV",
-          "Minibar"
-        ],
-        "features": [
-          "Non-smoking",
-          "Sea View"
-        ]
+        "amenities": ["WiFi", "TV", "Minibar"],
+        "features": ["Non-smoking", "Sea View"]
       }
     ],
     "rooms": [
+      {"roomType": "SGL", "roomId": "101"},
+      {"roomType": "SGL", "roomId": "102"},
+      {"roomType": "DBL", "roomId": "201"},
+      {"roomType": "DBL", "roomId": "202"}
+    ]
+  },
+  {
+    "id": "H2",
+    "name": "Downtown Suites",
+    "roomTypes": [
       {
-        "roomType": "SGL",
-        "roomId": "101"
+        "code": "SGL",
+        "description": "Single Room",
+        "amenities": ["WiFi", "TV"],
+        "features": ["Non-smoking"]
       },
       {
-        "roomType": "SGL",
-        "roomId": "102"
+        "code": "DBL",
+        "description": "Double Room",
+        "amenities": ["WiFi", "TV", "Minibar"],
+        "features": ["Non-smoking", "City View"]
       },
       {
-        "roomType": "DBL",
-        "roomId": "201"
-      },
-      {
-        "roomType": "DBL",
-        "roomId": "202"
+        "code": "SUITE",
+        "description": "Luxury Suite",
+        "amenities": ["WiFi", "TV", "Minibar", "Jacuzzi"],
+        "features": ["Non-smoking", "City View", "Kitchen"]
       }
+    ],
+    "rooms": [
+      {"roomType": "SGL", "roomId": "101"},
+      {"roomType": "SGL", "roomId": "102"},
+      {"roomType": "DBL", "roomId": "201"},
+      {"roomType": "DBL", "roomId": "202"},
+      {"roomType": "SUITE", "roomId": "301"}
     ]
   }
 ]

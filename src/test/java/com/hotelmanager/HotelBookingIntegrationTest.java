@@ -89,7 +89,7 @@ class HotelBookingIntegrationTest {
 
         // Verify
         assertThat(success).isTrue();
-        assertThat(outputStream.toString()).contains("Available Rooms: 2");
+        assertThat(outputStream.toString()).contains("Hotel: H1, Room Type: SGL, Date Range: 20240901, Available Rooms: 2");
     }
 
     @Test
@@ -119,6 +119,11 @@ class HotelBookingIntegrationTest {
         // Verify
         assertThat(success).isTrue();
         String output = outputStream.toString();
+
+        /*
+         * Expected format: "(YYYYMMDD-YYYYMMDD, N), ..." where N is the available rooms.
+         * Example: "(20250428-20250428, 2), (20250429-20250430, 1), (20250501-20250502, 2)"
+         */
 
         // Expected availability:
         // Today: 2 rooms available

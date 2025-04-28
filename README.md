@@ -1,4 +1,3 @@
-
 # Hotel Room Booking Management System
 
 A command-line application to manage hotel room availability and reservations, built with Java Spring Boot.
@@ -36,57 +35,36 @@ A command-line application to manage hotel room availability and reservations, b
    docker-compose run --rm app --hotels hotels.json --bookings bookings.json
    ```
 
-3. Start using the commands (see Usage section)
+3. Start using the commands (see [Commands](COMMANDS.md) for detailed usage)
 
-## Usage
+## Available Commands Overview
 
-### Running the Application
+Once the application is running, you can use these command types:
 
-```bash
-docker-compose run --rm app --hotels hotels.json --bookings bookings.json
-```
-
-### Available Commands
-
-Once the application is running, you can use these commands:
-
-#### 1. Check Availability
-
-Check availability for a specific room type on a date or date range:
+### 1. Check Availability
 
 ```
 Availability(hotelId, date, roomType)
 Availability(hotelId, startDate-endDate, roomType)
 ```
 
-Examples:
-```
-Availability(H1, 20240901, SGL)
-Availability(H1, 20240901-20240903, DBL)
-```
-
-Output: Number of available rooms (negative values indicate overbooking)
-
-#### 2. Search for Availability
-
-Search for availability over a specified number of days:
+### 2. Search for Availability
 
 ```
 Search(hotelId, daysAhead, roomType)
 ```
 
-Example:
-```
-Search(H1, 365, SGL)
-```
-
-Output: Comma-separated list of date ranges with availability:
-```
-(20241101-20241103, 2), (20241203-20241210, 1)
-```
-
-#### 3. Exit
+### 3. Exit
 
 Enter a blank line (press Enter without typing) to exit the application.
 
+## Data Files
 
+The application reads data from two JSON files:
+
+- `hotels.json`: Contains hotel information, room types, and inventory
+- `bookings.json`: Contains existing reservations
+
+## Documentation
+
+- [Detailed Command Documentation](COMMANDS.md) - Complete information about all commands, examples, and error handling

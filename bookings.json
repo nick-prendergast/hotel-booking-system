@@ -12,5 +12,117 @@
     "departure": "20240905",
     "roomType": "SGL",
     "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20240902",
+    "departure": "20240904",
+    "roomType": "SGL",
+    "roomRate": "Prepaid"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20240910",
+    "departure": "20240915",
+    "roomType": "DBL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20240910",
+    "departure": "20240915",
+    "roomType": "DBL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20241224",
+    "departure": "20241226",
+    "roomType": "DBL",
+    "roomRate": "Premium"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20240901",
+    "departure": "20240903",
+    "roomType": "SGL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20240902",
+    "departure": "20240905",
+    "roomType": "SUITE",
+    "roomRate": "Premium"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20240901",
+    "departure": "20240910",
+    "roomType": "DBL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20240901",
+    "departure": "20240910",
+    "roomType": "DBL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20250501",
+    "departure": "20250505",
+    "roomType": "SGL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20250501",
+    "departure": "20250503",
+    "roomType": "SGL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20250510",
+    "departure": "20250515",
+    "roomType": "DBL",
+    "roomRate": "Premium"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20250510",
+    "departure": "20250515",
+    "roomType": "DBL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H1",
+    "arrival": "20250520",
+    "departure": "20250525",
+    "roomType": "SGL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20250505",
+    "departure": "20250510",
+    "roomType": "SUITE",
+    "roomRate": "Premium"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20250501",
+    "departure": "20250507",
+    "roomType": "DBL",
+    "roomRate": "Standard"
+  },
+  {
+    "hotelId": "H2",
+    "arrival": "20250501",
+    "departure": "20250507",
+    "roomType": "DBL",
+    "roomRate": "Standard"
   }
 ]
